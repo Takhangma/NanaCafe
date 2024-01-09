@@ -5,8 +5,8 @@ body {
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: cover;
-    height: 100vh;
-    overflow-y: hidden;
+    /*height: 100vh;*/
+ /*   overflow-y: hidden;*/
 }
 
 .heading {
@@ -20,10 +20,7 @@ body {
     color: #4B170E;
 
 }
-/*select:hover {
-    background-color: #C3ACA4;
-    color: #4B170E
-}*/
+
 
 /*9C6644 7F5539 E6CCB2 EDE0D4*/
 h3 {

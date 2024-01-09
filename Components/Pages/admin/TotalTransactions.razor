@@ -1,0 +1,69 @@
+@page "/totalTransactions"
+@namespace FinalCoffee1.Pages.admin
+@using FinalCoffee1.Common.model;
+@using FinalCoffee1.Modules.Admin.service;
+@inject AdminService adminService
+@* <head>
+    <link rel="stylesheet" href="css/transaction.css" />
+</head> *@
+<h3 class="heading">Total Transactions</h3>
+@* <div class="body"> *@
+    @if (transactions == null)
+    {
+        <h3>Your Transaction is empty</h3>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Date</th>
+                    <th>Total Price</th>
+                    <th>Coffee Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transaction in transactions)
+                {
+                    <tr>
+                        <td>@transaction.Email</td>
+                        <td>@transaction.Date</td>
+                        <td>@transaction.TotalPrice</td>
+                        <td>
+                            @foreach (var coffee in transaction.CoffeeData)
+                            {
+                                <p>@coffee.Name (@coffee.CoffeeType) - @coffee.Size - @coffee.Price</p>
+                                @if (coffee.AddIns != null && coffee.AddIns.Any())
+                                {
+                                    <p>Add-ins:</p>
+                                    <ul>
+                                        @foreach (var addIn in coffee.AddIns)
+                                        {
+                                            <li>@addIn.Name - @addIn.Price</li>
+                                        }
+                                    </ul>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <h2>Total Revenue Generated: @totalRevenue</h2>
+    }
+@* </div> *@
+
+
+@code {
+    private List<OrderModel> transactions;
+    private decimal totalRevenue;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await adminService.GetSalesTransactionsAndTotalRevenue();
+        transactions = result.Item1;
+        totalRevenue = result.Item2;
+    }
+} 
+

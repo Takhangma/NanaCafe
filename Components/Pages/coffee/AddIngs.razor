@@ -73,9 +73,8 @@
                         <h5 class="modal-title">Add Addins</h5>
                     </div>
                     <div class="modal-body">
-                        <CoffeeInput ButtonLabel="Add Coffee" Model="addinsModel" OnSubmit="addAddins"
-                           ></CoffeeInput>
-                        @* message="notificationService.Message" messageClass="notificationService.messageClass" *@
+                        <CoffeeInput ButtonLabel="Add Coffee" Model="addinsModel" OnSubmit="addAddins" 
+                            message="notificationService.Message" messageClass="notificationService.messageClass"></CoffeeInput>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @onclick="CloseModal">Exit</button>
@@ -162,7 +161,7 @@
         addinsList = await coffeeService.getList("addins.json");
         sessionService.setNeedAuthorized(false);
         CloseModal();
-        StateHasChanged(); //Because UI is not able to fetch coffee so we need to make it sure it will fetch the added coffees.
+        StateHasChanged(); 
 
     }
     public async void editAddins()

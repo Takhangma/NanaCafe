@@ -1,3 +1,4 @@
+
 namespace FinalCoffee1.Modules.Admin.service;
 using FinalCoffee1.Modules.Staff.model;
 using FinalCoffee1.common.helperClass;
@@ -21,10 +22,6 @@ public class AdminService
         this.authentication = authentication;
     }
 
-    public Task<CustomType> logOut()
-    {
-        return Task.FromResult(new CustomType { Success = true, Message = "Logout Success" });
-    }
 
     public async Task readStaff()
     {
@@ -54,40 +51,31 @@ public class AdminService
     {
         try
         {
-            Trace.WriteLine("This is password: " + model.Password);
             var path = new FileManagement().DirectoryPath("database", fileName);
-            if (File.Exists(path))
-            {
-                var existingData = await File.ReadAllTextAsync(path);
-                var list = JsonSerializer.Deserialize<List<UserModel>>(existingData) ?? new List<UserModel>();
-                var itemToEdit = list.FirstOrDefault(c => c.Id == id);
-                Trace.WriteLine("This is ItemToEdit: " + itemToEdit);
-                if (itemToEdit != null)
-                {
-                    if (itemToEdit.GetType().GetProperty("Username") != null)
-                    {
-                        itemToEdit.Username = model.Username;
-                    }
-                    if (itemToEdit.GetType().GetProperty("Password") != null)
-                    {
-                        model.Password = this.authentication.GenerateHash(model.Password);
-                        itemToEdit.Password = model.Password;
-                    }
-                    int index = list.FindIndex(c => c.Id == id);
-                    list[index] = itemToEdit;
-                    var jsonData = JsonSerializer.Serialize(list);
-                    await File.WriteAllTextAsync(path, jsonData);
-                    return new CustomType { Success = true, Message = "Updated" };
-                }
-                else
-                {
-                    return new CustomType { Success = false, Message = "Item not found" };
-                }
-            }
-            else
+            if (!File.Exists(path))
             {
                 return new CustomType { Success = false, Message = "File not found" };
             }
+
+            var existingData = await File.ReadAllTextAsync(path);
+            var list = JsonSerializer.Deserialize<List<UserModel>>(existingData) ?? new List<UserModel>();
+            var itemToEdit = list.FirstOrDefault(c => c.Id == id);
+
+            if (itemToEdit == null)
+            {
+                return new CustomType { Success = false, Message = "Not Found" };
+            }
+
+            itemToEdit.Username = model.Username ?? itemToEdit.Username;
+            itemToEdit.Password = model.Password != null ? this.authentication.GenerateHash(model.Password) : itemToEdit.Password;
+
+            int index = list.FindIndex(c => c.Id == id);
+            list[index] = itemToEdit;
+
+            var jsonData = JsonSerializer.Serialize(list);
+            await File.WriteAllTextAsync(path, jsonData);
+
+            return new CustomType { Success = true, Message = "Updated Successfully" };
         }
         catch (Exception error)
         {
@@ -114,7 +102,7 @@ public class AdminService
                 if (reportType == "daily")
                 {
                     orders = list.Where(order => order.Date.Date == date.Date).ToList();
-                    reportTitle = $"Coffee Report of Date: {date.Date.ToString("d")}";
+                    reportTitle = $"Report of Date: {date.Date.ToString("d")}";
                 }
                 else if (reportType == "monthly")
                 {
@@ -130,8 +118,7 @@ public class AdminService
                 if (orders.Any())
                 {
                     var totalRevenue = orders.Sum(order =>
-                        order.CoffeeData.Sum(coffee =>
-                            coffee.Price + coffee.AddIns.Sum(addIn => addIn.Price)));
+                        order.TotalPrice);
 
                     string reportDirPath = reportType == "daily"
                         ? fileManagement.DirectoryPath("reports", "days")
@@ -147,30 +134,30 @@ public class AdminService
                         : Path.Combine(reportDirPath, $"OrderReport_{date.Month}_{date.Year}.pdf");
 
                     Trace.WriteLine("Report Path: " + reportPath);
-                  Document.Create(container =>
+                    Document.Create(container =>
                     {
                         container.Page(page =>
                         {
                             page.Size(PageSizes.A4);
                             page.Margin(1, Unit.Centimetre);
-                            page.PageColor(Colors.White);
+                            page.PageColor("#FAF9F6");
                             page.DefaultTextStyle(x => x.FontSize(12));
                             page.Header()
                                 .Padding(10)
                                 .Text(reportTitle)
-                                .SemiBold().FontSize(24).FontColor(Colors.Blue.Medium);
+                                .SemiBold().FontSize(24).FontColor("#4B170E");
 
                             page.Content()
                                 .PaddingVertical((float)0.5, Unit.Centimetre)
                                 .Column(column =>
                                 {
-                                    column.Item().Text($"Total Revenue: {totalRevenue}").FontSize(16).FontColor(Colors.Green.Darken1);
+                                    column.Item().Text($"Total Revenue: {totalRevenue}").FontSize(16).FontColor(Colors.Black);
 
                                     if (reportType == "daily")
                                     {
                                         var coffeeGroup = orders
                                             .SelectMany(order => order.CoffeeData)
-                                            .GroupBy(coffee => coffee.CoffeeType)
+                                            .GroupBy(coffee => coffee.Name)
                                             .OrderByDescending(group => group.Count())
                                             .Take(5)
                                             .ToList();
@@ -182,12 +169,12 @@ public class AdminService
                                             .Take(5)
                                             .ToList();
 
-                                        column.Item().Text("Top 5 coffee types sold").FontSize(16).FontColor(Colors.Red.Darken1);
+                                        column.Item().Text("Top 5 Coffees Sold").FontSize(16).FontColor("#4B170E");
                                         column.Item().Grid(grid =>
                                         {
                                             grid.Columns(2);
-                                            grid.Item().Text("Coffee Type").FontColor(Colors.Blue.Medium).SemiBold();
-                                            grid.Item().Text("Quantity").FontColor(Colors.Blue.Medium).SemiBold();
+                                            grid.Item().Text("Coffee Name").FontColor("#A6614B").SemiBold();
+                                            grid.Item().Text("Coffee Quantity").FontColor("#A6614B").SemiBold();
                                             foreach (var group in coffeeGroup)
                                             {
                                                 grid.Item().Text(group.Key);
@@ -195,12 +182,12 @@ public class AdminService
                                             }
                                         });
 
-                                        column.Item().Text("Top 5 Add-ins sold").FontSize(16).FontColor(Colors.Red.Darken1);
+                                        column.Item().Text("Top 5 Add-ins Sold").FontSize(16).FontColor("#4B170E");
                                         column.Item().Grid(grid =>
                                         {
                                             grid.Columns(2);
-                                            grid.Item().Text("Add-ins Name").FontColor(Colors.Blue.Medium).SemiBold();
-                                            grid.Item().Text("Quantity").FontColor(Colors.Blue.Medium).SemiBold();
+                                            grid.Item().Text("Add-ins Name").FontColor("#A6614B").SemiBold();
+                                            grid.Item().Text("Add-ins Quantity").FontColor("#A6614B").SemiBold();
                                             foreach (var addInGroup in addInsGroup)
                                             {
                                                 grid.Item().Text(addInGroup.Key);
@@ -238,5 +225,30 @@ public class AdminService
             return new CustomType { Success = false, Message = $"An error occurred: {ex.Message}" };
         }
     }
+    public async Task<(List<OrderModel>, decimal)> GetSalesTransactionsAndTotalRevenue()
+    {
+        try
+        {
+            var path = new FileManagement().DirectoryPath("database", "orderData.json");
+            if (File.Exists(path))
+            {
+                var existingData = await File.ReadAllTextAsync(path);
+                var list = JsonSerializer.Deserialize<List<OrderModel>>(existingData) ?? new List<OrderModel>();
 
+                var totalRevenue = list.Sum(order => order.TotalPrice);
+
+                return (list, totalRevenue);
+            }
+            else
+            {
+                Trace.WriteLine("File not found");
+                return (null, 0);
+            }
+        }
+        catch (Exception error)
+        {
+            Trace.WriteLine("An error occurred: " + error.Message);
+            return (null, 0);
+        }
+    }
 }

@@ -6,12 +6,19 @@ public class SessionService
 {
 
     public UserType CurrentUserType { get; private set; }
-
     private bool? needAuthorized;
     public event Action OnChange;
     public void NotifyStateChanged() => OnChange?.Invoke();
     private bool currentUser;
-
+    private int adminId = 1;
+    public int getId()
+    {
+        return this.adminId;
+    }
+    public void setId(int id)
+    {
+        this.adminId = id;
+    }
     public void SetCurrentUserType(UserType userType)
     {
         this.CurrentUserType = userType;
@@ -63,12 +70,11 @@ public class SessionService
             return (bool)this.needAuthorized;
         }
     }
-    private bool isOnlyCoffee=false;
-    public bool setOnlyCoffee(bool set)
+    private bool isOnlyCoffee = false;
+    public void setOnlyCoffee(bool set)
     {
         this.isOnlyCoffee = set;
         OnChange?.Invoke();
-        return this.isOnlyCoffee;
     }
     public bool getOnlyCoffee()
     {

@@ -6,6 +6,8 @@
 @inject NavigationManager NavigationManager; //for URL navigation /
 @inject NotificationService notificationService; //for displaying messages/
 @inject AdminService adminService;  //for handling admin related operations/
+@inject ActionService actionService;
+
 @page "/admin/logout"
 
 <head>
@@ -26,7 +28,7 @@
     //this method is triggered when logout button is clicked
     private async Task HandleSubmit()
     {
-        var result = await adminService.logOut();
+        var result = await actionService.logOut();
         if (result.Success)
         {
             //after logging out it sets current user as not logged in and requires authorization

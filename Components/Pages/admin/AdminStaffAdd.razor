@@ -15,6 +15,7 @@
     <thead>
         <tr>
             <th>Staff Name</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -37,7 +38,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <AdminForm ButtonLabel="Edit Staff" Model="staffModel" OnSubmit="editStaff"
-                                                message=notificationService.Message;
+                                                message="notificationService.Message"
                                                 messageClass="notificationService.messageClass"></AdminForm>
                                         </div>
                                         <div class="modal-footer">
@@ -56,7 +57,7 @@
 
 @if (!isAuthorization)
 {
-    <button type="button" class="btn-primary" @onclick="OpenAddModal">Add Staff</button>
+    <button type="button" class="btn btn-primary" @onclick="OpenAddModal">Add Staff</button>
     @if (showAddModal)
     {
         <div class="modal" tabindex="-1" role="dialog" style="display:block;">
@@ -136,7 +137,6 @@
         sessionService.setNeedAuthorized(false);
         CloseModal();
         StateHasChanged(); 
-        //Because UI is not able to fetch coffee so we need to make it sure it will fetch the added coffees.
     }
 
     public async void editStaff()
@@ -153,7 +153,7 @@
         var noneedAuth = await this.NeedAuthentication();
         if (!noneedAuth)
         {
-            var result = await actionService.Delete<BaseModel>(staff.Id, "staff.json");
+            var result = await actionService.Delete<StaffModel>(staff.Id, "staff.json");
             if (result.Success)
             {
                 staffList.Remove(staff);

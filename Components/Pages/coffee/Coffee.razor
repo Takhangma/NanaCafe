@@ -13,15 +13,15 @@
 @inject SessionService sessionService;
 @inject CoffeeService coffeeService;
 @inject ActionService actionService;
-<h3>Menu</h3>
+<h3>Our Menu</h3>
 <table>
     <thead>
         <tr>
-            <th>Name</th>
+            <th>Coffee Name</th>
             <th>Coffee Type</th>
             <th>Size</th>
             <th>Price</th>
-            <th>Action</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -79,7 +79,7 @@
                             message="notificationService.Message" messageClass="notificationService.messageClass"></CoffeeInput>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CloseModal">Exit</button>
                     </div>
                 </div>
             </div>
