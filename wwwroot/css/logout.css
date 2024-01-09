@@ -1,0 +1,17 @@
+
+.center-logout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 80vh; /* Decreased height to 80% of the viewport height */
+    width: 50%; /* Decreased width to 50% */
+    margin: auto;
+}
+
+    .center-logout p {
+        color: #4B170E;
+        font-family: 'Segoe Script', cursive;
+        font-weight: 800;
+        font-size: 33px
+    }

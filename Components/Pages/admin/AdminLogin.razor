@@ -1,0 +1,91 @@
+@page "/admin/login"
+@namespace FinalCoffee1.Pages.admin
+
+@*using statements to import necessary namespaces *@
+@using FinalCoffee1.Modules.Admin.model
+@using FinalCoffee1.Modules.Admin.service;
+@using FinalCoffee1.Common.model;
+@using FinalCoffee1.common.helperServices;
+@inject NavigationManager navigationManager //for URL navigation /
+@inject AdminService adminService;  //for handling admin related operations/
+@inject NotificationService notificationService;  //for displaying messages/
+@inject SessionService sessionService;  //for managing user sessions/
+
+@*for logging *@
+@using Microsoft.Extensions.Logging 
+
+@*for debugging *@
+@using System.Diagnostics 
+@inject SessionService sessionService;
+@inject ActionService actionService;  //for performing actions/
+
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+    <h3 class="heading">Please Login To Continue</h3>
+
+        <AdminForm ButtonLabel="Log in" Model="Model" OnSubmit="HandleSubmit" message="@message" messageClass="@messageClass" />
+
+  
+   
+</div>
+
+@code {
+    private string? message = "";
+    private string? messageClass = "";
+    //creating new instance of AdminModel object
+    AdminModel Model = new AdminModel();
+
+    //This method runs after the component is initialized
+    protected override void OnInitialized()
+    {
+        // Retrieves and displays any notification messages
+        message = notificationService.Message;
+        messageClass = notificationService.MessageClass;
+        notificationService.Clear();
+    }
+    //handles form submission
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            
+            Trace.WriteLine("This is Login");
+            //calling the login method from actionService to authenticate user
+            var result = await actionService.Login<AdminModel>(Model);
+            if (result.Success)
+            {
+                //if usertype is admin, sets the current user type to admin
+                if (Model.userType == UserType.admin)
+                {
+                    sessionService.SetCurrentUserType(UserType.admin);
+                }
+                //if usertype is staff, sets the current user type to staff
+                else if (Model.userType == UserType.staff)
+                {
+                    sessionService.SetCurrentUserType(UserType.staff);
+                }
+                //outputs the result of login operation for tracing
+                Trace.WriteLine(result);
+                //sets the current user as authenticated in the session
+                sessionService.SetCurrentUser(true);
+                //notifies state change
+                sessionService.NotifyStateChanged();
+                //sets a success message
+                message = result.Message;
+                messageClass = "success-message";
+                //Redirects users to home page
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                message = result.Message;
+                messageClass = "error-message";
+            }
+        }
+        catch (Exception error)
+        {
+            message = error.Message;
+        }
+
+    }
+
+}

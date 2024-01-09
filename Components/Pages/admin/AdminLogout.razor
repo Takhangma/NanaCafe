@@ -1,0 +1,48 @@
+@namespace FinalCoffee1.Pages.admin
+@using FinalCoffee1.common.helperServices;
+@using FinalCoffee1.Modules.Admin.service;
+@using System.Diagnostics
+@inject SessionService sessionService; //for managing user sessions/
+@inject NavigationManager NavigationManager; //for URL navigation /
+@inject NotificationService notificationService; //for displaying messages/
+@inject AdminService adminService;  //for handling admin related operations/
+@page "/admin/logout"
+
+<head>
+    <link rel="stylesheet" href="css/logout.css" />
+
+</head>
+
+<!--Button that triggers handlesubmit method-->
+<div class="center-logout">
+    <p class="p">See you again !</p>
+    <button @onclick="HandleSubmit">Logout</button>
+
+</div>
+
+@code {
+    private string? message = "";
+    private string? messageClass = "";
+    //this method is triggered when logout button is clicked
+    private async Task HandleSubmit()
+    {
+        var result = await adminService.logOut();
+        if (result.Success)
+        {
+            //after logging out it sets current user as not logged in and requires authorization
+            sessionService.SetCurrentUser(false);
+            sessionService.setNeedAuthorized(true);
+            message = result.Message;
+            messageClass = "success-message";
+            //notifies the user
+            notificationService.Notify(message, messageClass);
+            NavigationManager.NavigateTo("/admin/login");
+        }
+        else
+        {
+            //incase logout fails
+            message = result.Message;
+            messageClass = "error-message";
+        }
+    }
+}

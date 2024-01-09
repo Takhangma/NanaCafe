@@ -1,0 +1,86 @@
+body {
+    background-color: #FAF9F6;
+    font-family: Arial, sans-serif;
+    background-image: url(../../images/cafe.jpg);
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+.heading {
+    color: #4B170E;
+    font-family: 'Segoe Script', cursive;
+    font-weight: 800;
+    font-size: 30px
+}
+
+.select {
+    color: #4B170E;
+
+}
+/*select:hover {
+    background-color: #C3ACA4;
+    color: #4B170E
+}*/
+
+/*9C6644 7F5539 E6CCB2 EDE0D4*/
+h3 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    width: 400px;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px 0px #aaa;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    color: #4B170E
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    white-space: nowrap;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    /*background-color: #9C6644;*/
+    background-color: #4B170E;
+    /*color change garya*/
+    color: whitesmoke;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+    /*#CFBFAB*/
+    button:hover {
+        border:2px solid #C3ACA4;
+    }
+
+.error-message {
+    color: red;
+    margin-bottom: 15px;
+}
+
+.success-message {
+    color: green;
+    margin-bottom: 15px;
+}

@@ -1,0 +1,42 @@
+body {
+    background-color: #FAF9F6;
+    overflow-y: hidden;
+}
+
+.home-body{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height:100vh;
+    /*margin-bottom: 50px;*/
+    justify-content: center;
+   
+
+}
+    .home-body .heading {
+        /*color: #5D3F2A;*/
+        color: #4B170E;
+        font-family: 'Segoe Script', cursive;
+        font-weight: 800;
+        font-size: 40px
+    }
+
+    .home-body .body {
+        color: #4B170E;
+        font-family: 'Segoe Script', cursive;
+        font-weight: 800;
+        font-size: 33px
+    }
+
+/*.homehome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+    .homehome img {
+        max-width: 100%;
+        max-height: 100%;
+    }*/

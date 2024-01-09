@@ -1,0 +1,64 @@
+﻿@namespace FinalCoffee1.Pages.admin
+@using FinalCoffee1.Modules.Admin.model  @* Importing the namespace for the UserModel class *@
+@using FinalCoffee1.Common.model       @*Importing another namespace for common models *@
+@using FinalCoffee1.common.helperServices;
+@inject SessionService sessionService;
+
+<EditForm Model="Model" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        @* <p class="@messageClass">@message</p> *@
+        <label for="username">Enter Username</label>
+        <input required id="username" @bind="Model.Username" /> <!-- Binds input value to UserModel.Username -->
+        <ValidationMessage For="@(() => Model.Username)" /> <!-- Displays validation messages for Username field -->
+    </div>
+    @if (!sessionService.getCustomerOnly())
+    {
+        <div class="form-group">
+            <label for="password">Enter Password</label>
+            <input required id="password" type="password" @bind="Model.Password" />
+            <ValidationMessage For="@(() => Model.Password)" />
+        </div>
+        <div class="form-group">
+            <label for="userType">Select User Type</label>
+            <select @bind="Model.userType">
+                <option value="" class="select">User Type</option>
+                <option value="admin" class="select">Admin</option>
+                <option value="staff" class="select">Staff</option>
+            </select>
+            <ValidationMessage For="@(() => Model.userType)" />
+        </div>
+    }
+    @if (sessionService.getCustomerOnly())
+    {
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input required id="Email" type="text" @bind="Model.Email" />
+            <ValidationMessage For="@(() => Model.Email)" />
+        </div>
+    }
+    <button type="submit">@ButtonLabel</button>  <!-- Submit button with text from ButtonLabel parameter -->
+</EditForm>
+@code {
+    //all the paramters defined for this component
+
+    //parameters for submit button label
+    [Parameter]
+    public string? ButtonLabel { get; set; }  
+
+    //Parameter for submit event callback
+    [Parameter]
+    public EventCallback OnSubmit { get; set; }
+
+    //parameter for user model with default values
+    [Parameter]
+    public UserModel Model { get; set; } = new UserModel { userType = null, Password=null };
+
+    //paramter for displaying a message
+    [Parameter]
+    public string? message { get; set; }
+
+    //parameter for CSS class of the message
+    [Parameter]
+    public string? messageClass { get; set; }
+}
