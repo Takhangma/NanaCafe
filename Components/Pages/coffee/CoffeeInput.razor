@@ -7,7 +7,7 @@
 
     <div class="form-group">
         @* <p class="@messageClass">@message</p> *@
-        <label for="coffeeName" class="col-sm-2 col-form-label whitespace-nowrap">Enter Coffee Name</label>
+        <label for="coffeeName" class="col-sm-2 col-form-label whitespace-nowrap">Enter Name</label>
         <div class="col-sm-12">
             <input type="text" id="coffeeName" class="form-control" required @bind="Model.Name" />
             <ValidationMessage For="@(() => Model.Name)" />

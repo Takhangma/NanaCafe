@@ -40,7 +40,7 @@ public class ActionService
             var jsonData = JsonSerializer.Serialize(userList);
             await File.WriteAllTextAsync(path, jsonData);
             Trace.WriteLine(path);
-            return new CustomType { Success = true, Message = $"{data.userType} registered successfully" };
+            return new CustomType { Success = true, Message = $"{data.userType} Registered Successfully" };
         }
         catch (Exception ex)
         {
@@ -74,7 +74,7 @@ public class ActionService
                         Trace.WriteLine("This is Authentication: " + isAuthenticatedUser);
                         if (isAuthenticatedUser)
                         {
-                            return new CustomType { Success = true, Message = "Login Success" };
+                            return new CustomType { Success = true, Message = "Successfully Logged In" };
                         }
                         else
                         {

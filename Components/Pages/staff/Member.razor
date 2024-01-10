@@ -13,11 +13,8 @@
 @using System.Diagnostics
 @inject SessionService sessionService;
 @inject ActionService actionService;
-@* <h3>Register Member</h3>
 
-<AdminForm ButtonLabel="Add Member" Model="Model" OnSubmit="HandleSubmit" message="@message"
-    messageClass="@messageClass" /> *@
-<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+<div class="d-flex justify-content-center align-items-center" style="height: 100vh; overflow-y: hidden;">
     <div>
         <h3 class="text-center" style="font-family: 'Segoe Script', cursive; font-weight:bold">Register Member</h3>
         <AdminForm ButtonLabel="Add Member" Model="Model" OnSubmit="HandleSubmit" message="@message"

@@ -7,7 +7,7 @@
 <EditForm Model="Model" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
     <div class="form-group">
-        @* <p class="@messageClass">@message</p> *@
+       @*  <p class="@messageClass">@message</p>  *@
         <label for="username">Enter Username</label>
         <input required id="username" @bind="Model.Username" /> <!-- Binds input value to UserModel.Username -->
         <ValidationMessage For="@(() => Model.Username)" /> <!-- Displays validation messages for Username field -->

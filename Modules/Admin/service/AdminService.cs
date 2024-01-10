@@ -102,7 +102,7 @@ public class AdminService
                 if (reportType == "daily")
                 {
                     orders = list.Where(order => order.Date.Date == date.Date).ToList();
-                    reportTitle = $"Report of Date: {date.Date.ToString("d")}";
+                    reportTitle =$"Report of Date: {date.Date.ToString("d")}";
                 }
                 else if (reportType == "monthly")
                 {

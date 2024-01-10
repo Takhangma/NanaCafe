@@ -4,39 +4,34 @@
 @using System.Diagnostics;
 @inject AdminService adminService;
 
-<h3> Generate Reports</h3>
-<h3 class="@messageClass"> @message </h3>
-@* <EditForm Model="this" OnValidSubmit="GenerateReport">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
 
-    <InputDate @bind-Value="selectedDate" />
-    <select @bind="reportType" >
-        <option value="daily">Daily</option>
-        <option value="monthly">Monthly</option>
-    </select>
-    <button type="submit">Generate Report</button>
-</EditForm> *@
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+    <h3 class="heading"> Generate Reports</h3>
+    <h3 class="@messageClass"> @message </h3>
+    <EditForm Model="this" OnValidSubmit="GenerateReport" class="my-form">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-<EditForm Model="this" OnValidSubmit="GenerateReport" class="my-form">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+        <div class="form-group">
+            <label for="selectedDate">Selected Date:</label>
+            <InputDate id="selectedDate" @bind-Value="selectedDate" class="form-control" />
+        </div>
 
-    <div class="form-group">
-        <label for="selectedDate">Selected Date:</label>
-        <InputDate id="selectedDate" @bind-Value="selectedDate" class="form-control" />
-    </div>
+        <div class="form-group">
+            <label for="reportType">Report Type:</label>
+            <select id="reportType" @bind="reportType" class="form-control">
+                <option value="daily">Daily</option>
+                <option value="monthly">Monthly</option>
+            </select>
+        </div>
 
-    <div class="form-group">
-        <label for="reportType">Report Type:</label>
-        <select id="reportType" @bind="reportType" class="form-control">
-            <option value="daily">Daily</option>
-            <option value="monthly">Monthly</option>
-        </select>
-    </div>
+        <button type="submit" class="btn btn-primary">Generate Report</button>
+    </EditForm>
+</div>
+    
 
-    <button type="submit" class="btn btn-primary">Generate Report</button>
-</EditForm>
+
+
 
 
 @code {
